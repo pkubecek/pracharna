@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style>
         :root {
@@ -43,20 +43,18 @@
         .page-title h1 { font-family: var(--font-head); text-transform: uppercase; font-weight: 400; margin: 0; letter-spacing: 2px; }
         .separator { height: 2px; width: 50px; background: var(--primary-green); margin: 15px auto; }
         
-        /* Styl kontejneru pro mapu */
+        /* Mapa */
         #map-container {
             width: 100%;
-            height: 70vh; /* Výška mapy v rámci designu */
+            height: 70vh;
             min-height: 500px;
             background: #e0e0e0;
             border: 5px solid white;
             box-shadow: 0 0 15px rgba(0,0,0,0.1);
         }
-        
-        /* Samotná mapa */
         #map { width: 100%; height: 100%; z-index: 1; }
 
-        /* --- STYLY PRO TLAČÍTKA GEOJSON --- */
+        /* Tlačítka GeoJSON */
         .buttons-container {
             display: flex;
             flex-wrap: wrap;
@@ -87,6 +85,24 @@
             box-shadow: 0 4px 8px rgba(0,0,0,0.1);
         }
 
+        /* Vlastní styl markerů na mapě (CSS pro L.divIcon) */
+        .custom-map-marker {
+            background-color: var(--primary-green);
+            border: 2px solid white;
+            border-radius: 50%;
+            color: white;
+            display: flex !important; /* Důležité pro centrování ikonky */
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 3px 6px rgba(0,0,0,0.3);
+            transition: transform 0.2s;
+        }
+        .custom-map-marker:hover {
+            transform: scale(1.1);
+            background-color: #5e7a3b; /* Tmavší zelená po najetí */
+            z-index: 1000 !important;
+        }
+
         /* Patička */
         footer { background: #222; color: #aaa; padding: 60px 0 20px; font-size: 14px; margin-top: auto; }
         .footer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 30px; margin-bottom: 40px; }
@@ -94,7 +110,6 @@
         .footer-col p { line-height: 1.6; margin-bottom: 10px; }
         .copyright { text-align: center; border-top: 1px solid #333; padding-top: 20px; font-size: 12px; }
 
-        /* Mobil */
         @media(max-width: 768px) {
             .container { flex-direction: column; text-align: center; gap: 10px; }
             .nav-flex { flex-direction: column; gap: 20px; }
@@ -173,7 +188,7 @@
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
     <script>
-        // --- ZDE JE VÁŠ PŮVODNÍ KÓD MAPY (BEZE ZMĚN) ---
+        // --- 1. ZÁKLADNÍ MAPA (Vaše původní nastavení) ---
         var map = L.map('map').setView([49.6075692, 17.2155489], 19);
 
         L.tileLayer('tiles/{z}/{x}/{y}.png', {
@@ -189,53 +204,72 @@
             zIndex: -1 
         }).addTo(map);
 
-        // --- NAČTENÍ GEOJSON Z GISTU A VYTVOŘENÍ TLAČÍTEK ---
-        
-        // URL adresa vašeho raw geojsonu
+
+        // --- 2. DEFINICE IKON PRO JEDNOTLIVÉ BODY ---
+        // Zde mapujeme 'id' z GeoJSONu na Font Awesome ikonku
+        const iconMapping = {
+            'parkoviste': 'fa-square-parking', // P
+            'hotel':      'fa-bed',            // Postel
+            'zastavka':   'fa-bus',            // Autobus
+            'restaurace': 'fa-utensils',       // Příbor
+            'rybnik':     'fa-water',          // Voda
+            'zahrada':    'fa-tree',           // Strom
+            'default':    'fa-map-pin'         // Špendlík (pro ostatní)
+        };
+
+        // --- 3. NAČTENÍ DAT A VYTVOŘENÍ MARKERŮ ---
         const geojsonUrl = 'https://gist.githubusercontent.com/pkubecek/8160bfb577b1cd25bdab6ca018f83b98/raw/2dc0da367e497c537e8105c628c9c86cede26cb4/data.geojson';
 
         fetch(geojsonUrl)
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error("HTTP error " + response.status);
-                }
-                return response.json();
-            })
+            .then(res => res.json())
             .then(data => {
                 const buttonContainer = document.getElementById('poi-buttons');
 
-                // Projdeme všechny features v GeoJSONu
                 data.features.forEach(feature => {
-                    // Zjistíme, jestli má feature ID (buď přímo na rootu nebo v properties)
-                    const featureId = feature.id || (feature.properties && feature.properties.id);
+                    const id = feature.id || (feature.properties && feature.properties.id);
+                    
+                    if (id && feature.geometry.type === "Point") {
+                        const [lon, lat] = feature.geometry.coordinates;
 
-                    if (featureId && feature.geometry && feature.geometry.type === "Point") {
-                        // Vytvoření tlačítka
+                        // 1. Zjistíme, jakou ikonku použít
+                        const iconClass = iconMapping[id] || iconMapping['default'];
+
+                        // 2. Vytvoříme vlastní HTML marker (divIcon)
+                        const customIcon = L.divIcon({
+                            className: 'custom-map-marker', // CSS třída definovaná nahoře v <style>
+                            html: `<i class="fas ${iconClass}" style="font-size: 16px;"></i>`,
+                            iconSize: [36, 36], // Velikost kolečka
+                            iconAnchor: [18, 18], // Střed kolečka
+                            popupAnchor: [0, -20] // Kde se otevře bublina
+                        });
+
+                        // 3. Přidáme marker na mapu
+                        const marker = L.marker([lat, lon], {icon: customIcon}).addTo(map);
+                        
+                        // Bublina s názvem (první písmeno velké)
+                        const title = id.charAt(0).toUpperCase() + id.slice(1);
+                        marker.bindPopup(`<b>${title}</b>`);
+
+                        // 4. Vytvoříme ovládací tlačítko pod mapou
                         const btn = document.createElement('button');
                         btn.className = 'geo-btn';
-                        btn.textContent = featureId; // Text tlačítka je ID
-
-                        // Akce po kliknutí - Zoom na bod
+                        btn.innerHTML = `<i class="fas ${iconClass}"></i> ${id}`; // Ikonka i v tlačítku
+                        
                         btn.onclick = function() {
-                            // GeoJSON má souřadnice [Lon, Lat], Leaflet chce [Lat, Lon]
-                            const coords = feature.geometry.coordinates;
-                            const lat = coords[1];
-                            const lon = coords[0];
-
-                            // Plynulý přesun na bod (flyTo) s vysokým zoomem
-                            map.flyTo([lat, lon], 21, {
+                            // Zoom na bod
+                            map.flyTo([lat, lon], 22, {
                                 animate: true,
-                                duration: 1.5 
+                                duration: 1.5
                             });
+                            // Otevřít bublinu u markeru
+                            marker.openPopup();
                         };
 
                         buttonContainer.appendChild(btn);
                     }
                 });
             })
-            .catch(error => {
-                console.error('Chyba při načítání GeoJSON:', error);
-            });
+            .catch(err => console.error("Chyba načítání bodů:", err));
 
     </script>
 </body>
