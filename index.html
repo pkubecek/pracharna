@@ -3,167 +3,52 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mapa – Garden Restaurant Prachárna</title>
+    <title>Garden Restaurant Prachárna - Mapa</title>
     
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+    
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
     <style>
         /* --- DESIGN PRACHÁRNA --- */
-        :root {
-            --primary-green: #7da14f; /* Přesnější odstín zelené dle webu */
-            --dark-grey: #333333;
-            --light-bg: #f4f4f4;
-            --font-head: 'Montserrat', sans-serif;
-            --font-body: 'Open Sans', sans-serif;
-        }
-
-        body { margin: 0; padding: 0; font-family: var(--font-body); color: var(--dark-grey); display: flex; flex-direction: column; min-height: 100vh; }
-        a { text-decoration: none; color: inherit; transition: 0.3s; }
-        a:hover { color: var(--primary-green); }
-
+        body { margin: 0; padding: 0; font-family: 'Open Sans', sans-serif; color: #333; display: flex; flex-direction: column; min-height: 100vh; }
+        
         /* Horní lišta */
-        .top-bar { background: #f8f8f8; border-bottom: 1px solid #ddd; padding: 8px 0; font-size: 13px; color: #666; }
-        .container { max-width: 1140px; margin: 0 auto; padding: 0 15px; display: flex; justify-content: space-between; align-items: center; }
-        .top-icons span { margin-right: 15px; } .top-icons i { color: var(--primary-green); margin-right: 5px; }
+        .top-bar { background: #f8f8f8; padding: 10px 0; font-size: 13px; color: #666; border-bottom: 1px solid #eee; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; display: flex; justify-content: space-between; align-items: center; }
         
         /* Navigace */
-        header { background: white; padding: 20px 0; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); z-index: 1000; position: relative; }
+        header { padding: 25px 0; box-shadow: 0 5px 15px rgba(0,0,0,0.05); z-index: 1000; position: relative; background: white; }
         .nav-flex { display: flex; justify-content: space-between; align-items: center; }
-        .logo { font-family: var(--font-head); font-size: 24px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; }
-        .logo span { color: var(--primary-green); }
-        .menu { list-style: none; display: flex; gap: 25px; margin: 0; padding: 0; }
-        .menu a { font-family: var(--font-head); font-weight: 600; text-transform: uppercase; font-size: 14px; letter-spacing: 0.5px; }
-        .menu a.active { color: var(--primary-green); }
+        .logo { font-family: 'Montserrat', sans-serif; font-size: 26px; font-weight: 700; text-transform: uppercase; color: #333; text-decoration: none; }
+        .logo span { color: #7da14f; }
+        .menu { list-style: none; display: flex; gap: 30px; margin: 0; padding: 0; }
+        .menu a { text-decoration: none; color: #333; font-weight: 600; text-transform: uppercase; font-size: 14px; font-family: 'Montserrat', sans-serif; }
+        .menu a:hover { color: #7da14f; }
 
-        /* Obsah s mapou */
-        .content-area { flex: 1; background: var(--light-bg); padding: 40px 0; }
-        .page-title { text-align: center; margin-bottom: 30px; }
-        .page-title h1 { font-family: var(--font-head); text-transform: uppercase; font-weight: 400; margin: 0; letter-spacing: 2px; }
-        .separator { height: 2px; width: 50px; background: var(--primary-green); margin: 15px auto; }
-        
-        /* Styl mapy */
-        #map-container {
-            width: 100%;
-            height: 600px;
-            background: #e0e0e0; /* Šedé pozadí při načítání */
-            border: 5px solid white;
-            box-shadow: 0 0 15px rgba(0,0,0,0.1);
+        /* Sekce mapy */
+        .map-wrapper { 
+            background: #f4f4f4; 
+            padding: 40px 0; 
+            flex: 1; /* Roztáhne se na zbytek stránky */
         }
-        #map { width: 100%; height: 100%; z-index: 1; }
+        .title-section { text-align: center; margin-bottom: 30px; }
+        .title-section h2 { font-family: 'Montserrat', sans-serif; font-weight: 400; font-size: 32px; margin: 0; text-transform: uppercase; letter-spacing: 2px; }
+        .line { width: 60px; height: 3px; background: #7da14f; margin: 15px auto; }
+
+        /* --- STYL PRO MAPU --- */
+        #map {
+            width: 100%;
+            height: 600px; /* Pevná výška je nutná! */
+            background-color: #e5e5e5; /* Šedé pozadí, než se načtou dlaždice */
+            border: 1px solid #ccc;
+            /* Dočasný červený rámeček pro kontrolu, že tam ten div je */
+            outline: 2px dashed red; 
+        }
 
         /* Patička */
-        footer { background: #222; color: #aaa; padding: 60px 0 20px; font-size: 14px; margin-top: auto; }
-        .footer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 30px; margin-bottom: 40px; }
-        .footer-col h4 { color: white; text-transform: uppercase; margin-top: 0; letter-spacing: 1px; font-family: var(--font-head); }
-        .footer-col p { line-height: 1.6; margin-bottom: 10px; }
-        .copyright { text-align: center; border-top: 1px solid #333; padding-top: 20px; font-size: 12px; }
-
-        /* Mobil */
-        @media(max-width: 768px) {
-            .container { flex-direction: column; text-align: center; gap: 10px; }
-            .nav-flex { flex-direction: column; gap: 20px; }
-            .menu { flex-direction: column; gap: 10px; }
-            #map-container { height: 400px; }
-        }
-    </style>
-</head>
-<body>
-
-    <div class="top-bar">
-        <div class="container">
-            <div class="top-icons">
-                <span><i class="fas fa-phone"></i> +420 737 007 015</span>
-                <span><i class="far fa-clock"></i> 11:00 - 22:00</span>
-            </div>
-            <div class="socials">
-                <a href="#"><i class="fab fa-facebook"></i></a>
-                <a href="#"><i class="fab fa-instagram"></i></a>
-            </div>
-        </div>
-    </div>
-
-    <header>
-        <div class="container nav-flex">
-            <a href="#" class="logo">Garden Restaurant <span>Prachárna</span></a>
-            <ul class="menu">
-                <li><a href="#">Domů</a></li>
-                <li><a href="#">Menu</a></li>
-                <li><a href="#" class="active">Mapa</a></li>
-                <li><a href="#">Kontakt</a></li>
-            </ul>
-        </div>
-    </header>
-
-    <div class="content-area">
-        <div class="container">
-            <div class="page-title">
-                <h1>Interaktivní Mapa</h1>
-                <div class="separator"></div>
-                <p>Prohlédněte si detailní mapu našeho areálu a okolí.</p>
-            </div>
-            
-            <div id="map-container">
-                <div id="map"></div>
-            </div>
-        </div>
-    </div>
-
-    <footer>
-        <div class="container">
-            <div class="footer-grid">
-                <div class="footer-col">
-                    <h4>Kontakt</h4>
-                    <p>Křelovská 91, Olomouc<br>
-                    restaurace@hotel-pracharna.cz<br>
-                    +420 737 007 015</p>
-                </div>
-                <div class="footer-col">
-                    <h4>Otevírací doba</h4>
-                    <p>Pondělí - Neděle<br>11:00 - 22:00</p>
-                </div>
-                <div class="footer-col">
-                    <h4>O nás</h4>
-                    <p>Stylová restaurace v přírodním prostředí s výhledem na rybník. Ideální pro svatby, oslavy i firemní akce.</p>
-                </div>
-            </div>
-            <div class="copyright">
-                &copy; 2025 Hotel Prachárna s.r.o. | Design inspirován restaurant-pracharna.cz
-            </div>
-        </div>
-    </footer>
-
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
-
-    <script>
-        // --- NASTAVENÍ MAPY ---
-        
-        // 1. Souřadnice středu (Olomouc / Prachárna)
-        // Pokud se mapa po načtení ukáže prázdná, pravděpodobně je problém v ZOOM levelu
-        var map = L.map('map').setView([49.6105, 17.2285], 14); 
-
-        // 2. Načtení dlaždic z GitHub složky
-        // Cesta 'tiles/{z}/{x}/{y}.png' hledá složku tiles ve stejném adresáři jako index.html
-        var myLayer = L.tileLayer('tiles/{z}/{x}/{y}.png', {
-            minZoom: 0,
-            maxZoom: 19,    // Nastavte dle toho, kolik jste vygenerovali
-            tms: false,     // Pokud jsou dlaždice rozházené, změňte na true
-            attribution: 'Vlastní mapová data | &copy; Prachárna'
-        }).addTo(map);
-
-        // 3. DEBUGGING (Pomoc při chybě)
-        // Toto vypíše do konzole prohlížeče (F12) přesnou adresu, kterou se snaží načíst
-        myLayer.on('tileerror', function(e) {
-            console.error('Chyba načítání dlaždice:', e.url);
-            console.log('Zkontrolujte, zda ve složce tiles na GitHubu skutečně existuje soubor: ' + e.url.split('tiles/')[1]);
-        });
-
-        // Přidání markeru pro restauraci
-        L.marker([49.6105, 17.2285]).addTo(map)
-            .bindPopup("<b>Garden Restaurant Prachárna</b><br>Tady nás najdete.")
-            .openPopup();
-
-    </script>
-</body>
-</html>
+        footer { background: #222; color: #aaa; padding: 60px 0 20px; margin-top: auto; font-size: 14px; }
+        .footer-content { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 40px; margin-bottom: 40px; }
+        .footer-col h3 { color: white; text-transform: uppercase; margin-top: 0; font-family: 'Montserrat', sans-serif; }
+        .copyright { text-align
