@@ -188,11 +188,11 @@
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
     <script>
-        var map = L.map('map').setView([49.6075692, 17.2155489], 19);
-
+        var map = L.map('map', {
+            minZoom: 16,
+            maxZoom: 22
+        }).setView([49.6075692, 17.2155489], 19);
         L.tileLayer('tiles/{z}/{x}/{y}.png', {
-            minZoom: 16, 
-            maxZoom: 22, 
             attribution: '© GitHubPages',
             opacity: 0.8 
         }).addTo(map);
