@@ -85,13 +85,13 @@
             box-shadow: 0 4px 8px rgba(0,0,0,0.1);
         }
 
-        /* Vlastní styl markerů na mapě (CSS pro L.divIcon) */
+        /* Vlastní styl markerů na mapě */
         .custom-map-marker {
             background-color: var(--primary-green);
             border: 2px solid white;
             border-radius: 50%;
             color: white;
-            display: flex !important; /* Důležité pro centrování ikonky */
+            display: flex !important;
             justify-content: center;
             align-items: center;
             box-shadow: 0 3px 6px rgba(0,0,0,0.3);
@@ -99,7 +99,7 @@
         }
         .custom-map-marker:hover {
             transform: scale(1.1);
-            background-color: #5e7a3b; /* Tmavší zelená po najetí */
+            background-color: #5e7a3b;
             z-index: 1000 !important;
         }
 
@@ -188,7 +188,7 @@
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
     <script>
-        // --- 1. ZÁKLADNÍ MAPA (Vaše původní nastavení) ---
+        // --- 1. ZÁKLADNÍ MAPA ---
         var map = L.map('map').setView([49.6075692, 17.2155489], 19);
 
         L.tileLayer('tiles/{z}/{x}/{y}.png', {
@@ -205,71 +205,77 @@
         }).addTo(map);
 
 
-        // --- 2. DEFINICE IKON PRO JEDNOTLIVÉ BODY ---
-        // Zde mapujeme 'id' z GeoJSONu na Font Awesome ikonku
-        const iconMapping = {
-            'parkoviste': 'fa-square-parking', // P
-            'hotel':      'fa-bed',            // Postel
-            'zastavka':   'fa-bus',            // Autobus
-            'restaurace': 'fa-utensils',       // Příbor
-            'rybnik':     'fa-water',          // Voda
-            'zahrada':    'fa-tree',           // Strom
-            'default':    'fa-map-pin'         // Špendlík (pro ostatní)
+        // --- 2. NOVÁ DATA (Vaše JSON data vložena přímo sem) ---
+        const geojsonData = {
+            "type": "FeatureCollection",
+            "features": [
+                {"type":"Feature","properties":{"id":"hotel"},"geometry":{"coordinates":[17.216397640283134,49.607922856679494],"type":"Point"}},
+                {"type":"Feature","properties":{"id":"zastávka"},"geometry":{"coordinates":[17.213482705394085,49.60703339880715],"type":"Point"}},
+                {"type":"Feature","properties":{"id":"zahrada"},"geometry":{"coordinates":[17.217088143494067,49.60784511180168],"type":"Point"}},
+                {"type":"Feature","properties":{"id":"rybník"},"geometry":{"coordinates":[17.215041904152088,49.60785809321166],"type":"Point"}},
+                {"type":"Feature","properties":{"id":"restaurace"},"geometry":{"coordinates":[17.213910689019002,49.60701477163113],"type":"Point"}},
+                {"type":"Feature","properties":{"id":"parkoviště"},"geometry":{"coordinates":[17.216597581509546,49.6074690589183],"type":"Point"}}
+            ]
         };
 
-        // --- 3. NAČTENÍ DAT A VYTVOŘENÍ MARKERŮ ---
-        const geojsonUrl = 'https://gist.githubusercontent.com/pkubecek/8160bfb577b1cd25bdab6ca018f83b98/raw/2dc0da367e497c537e8105c628c9c86cede26cb4/data.geojson';
+        // --- 3. PÁROVÁNÍ IKON (Upraveno na česká ID) ---
+        const iconMapping = {
+            'parkoviště': 'fa-square-parking', // P
+            'hotel':      'fa-bed',            // Postel
+            'zastávka':   'fa-bus',            // Autobus
+            'restaurace': 'fa-utensils',       // Příbor
+            'rybník':     'fa-water',          // Voda
+            'zahrada':    'fa-tree',           // Strom
+            'default':    'fa-map-pin'         // Ostatní
+        };
 
-        fetch(geojsonUrl)
-            .then(res => res.json())
-            .then(data => {
-                const buttonContainer = document.getElementById('poi-buttons');
 
-                data.features.forEach(feature => {
-                    const id = feature.id || (feature.properties && feature.properties.id);
-                    
-                    if (id && feature.geometry.type === "Point") {
-                        const [lon, lat] = feature.geometry.coordinates;
+        // --- 4. ZPRACOVÁNÍ DAT ---
+        const buttonContainer = document.getElementById('poi-buttons');
 
-                        // 1. Zjistíme, jakou ikonku použít
-                        const iconClass = iconMapping[id] || iconMapping['default'];
+        geojsonData.features.forEach(feature => {
+            // Bezpečné získání ID z properties
+            const id = feature.properties ? feature.properties.id : null;
+            
+            if (id && feature.geometry.type === "Point") {
+                const [lon, lat] = feature.geometry.coordinates;
 
-                        // 2. Vytvoříme vlastní HTML marker (divIcon)
-                        const customIcon = L.divIcon({
-                            className: 'custom-map-marker', // CSS třída definovaná nahoře v <style>
-                            html: `<i class="fas ${iconClass}" style="font-size: 16px;"></i>`,
-                            iconSize: [36, 36], // Velikost kolečka
-                            iconAnchor: [18, 18], // Střed kolečka
-                            popupAnchor: [0, -20] // Kde se otevře bublina
-                        });
+                // 1. Výběr ikonky
+                // Pokud ID v seznamu není, použije se 'default'
+                const iconClass = iconMapping[id] || iconMapping['default'];
 
-                        // 3. Přidáme marker na mapu
-                        const marker = L.marker([lat, lon], {icon: customIcon}).addTo(map);
-                        
-                        // Bublina s názvem (první písmeno velké)
-                        const title = id.charAt(0).toUpperCase() + id.slice(1);
-                        marker.bindPopup(`<b>${title}</b>`);
-
-                        // 4. Vytvoříme ovládací tlačítko pod mapou
-                        const btn = document.createElement('button');
-                        btn.className = 'geo-btn';
-                        btn.innerHTML = `<i class="fas ${iconClass}"></i> ${id}`; // Ikonka i v tlačítku
-                        
-                        btn.onclick = function() {
-                            // Zoom na bod
-                            map.flyTo([lat, lon], 22, {
-                                animate: true,
-                                duration: 1.5
-                            });
-                            // Otevřít bublinu u markeru
-                            marker.openPopup();
-                        };
-
-                        buttonContainer.appendChild(btn);
-                    }
+                // 2. Vytvoření markeru
+                const customIcon = L.divIcon({
+                    className: 'custom-map-marker',
+                    html: `<i class="fas ${iconClass}" style="font-size: 16px;"></i>`,
+                    iconSize: [36, 36],
+                    iconAnchor: [18, 18],
+                    popupAnchor: [0, -20]
                 });
-            })
-            .catch(err => console.error("Chyba načítání bodů:", err));
+
+                const marker = L.marker([lat, lon], {icon: customIcon}).addTo(map);
+                
+                // Formátování názvu pro bublinu (Parkoviště místo parkoviště)
+                const title = id.charAt(0).toUpperCase() + id.slice(1);
+                marker.bindPopup(`<b>${title}</b>`);
+
+                // 3. Vytvoření tlačítka
+                const btn = document.createElement('button');
+                btn.className = 'geo-btn';
+                btn.innerHTML = `<i class="fas ${iconClass}"></i> ${id}`;
+                
+                btn.onclick = function() {
+                    // Zoom a otevření bubliny
+                    map.flyTo([lat, lon], 22, {
+                        animate: true,
+                        duration: 1.5
+                    });
+                    marker.openPopup();
+                };
+
+                buttonContainer.appendChild(btn);
+            }
+        });
 
     </script>
 </body>
