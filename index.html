@@ -1,149 +1,45 @@
 <!DOCTYPE html>
 <html lang="cs">
 <head>
-    <meta charset="UTF-8">
+    <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Garden Restaurant Prachárna - Mapa</title>
+    <title>MapAnt.cz</title>
     
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-
     <style>
-        /* --- DESIGN PRACHÁRNA --- */
-        body { margin: 0; padding: 0; font-family: 'Open Sans', sans-serif; color: #333; display: flex; flex-direction: column; min-height: 100vh; }
-        
-        /* Horní lišta */
-        .top-bar { background: #f8f8f8; padding: 10px 0; font-size: 13px; color: #666; border-bottom: 1px solid #eee; }
-        .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; display: flex; justify-content: space-between; align-items: center; }
-        
-        /* Navigace */
-        header { padding: 25px 0; box-shadow: 0 5px 15px rgba(0,0,0,0.05); z-index: 1000; position: relative; background: white; }
-        .nav-flex { display: flex; justify-content: space-between; align-items: center; }
-        .logo { font-family: 'Montserrat', sans-serif; font-size: 26px; font-weight: 700; text-transform: uppercase; color: #333; text-decoration: none; }
-        .logo span { color: #7da14f; }
-        .menu { list-style: none; display: flex; gap: 30px; margin: 0; padding: 0; }
-        .menu a { text-decoration: none; color: #333; font-weight: 600; text-transform: uppercase; font-size: 14px; font-family: 'Montserrat', sans-serif; }
-        .menu a:hover { color: #7da14f; }
-
-        /* Sekce mapy */
-        .map-wrapper { 
-            background: #f4f4f4; 
-            padding: 40px 0; 
-            flex: 1; /* Roztáhne se na zbytek stránky */
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
         }
-        .title-section { text-align: center; margin-bottom: 30px; }
-        .title-section h2 { font-family: 'Montserrat', sans-serif; font-weight: 400; font-size: 32px; margin: 0; text-transform: uppercase; letter-spacing: 2px; }
-        .line { width: 60px; height: 3px; background: #7da14f; margin: 15px auto; }
-
-        /* --- STYL PRO MAPU --- */
         #map {
             width: 100%;
-            height: 600px; /* Pevná výška je nutná! */
-            background-color: #e5e5e5; /* Šedé pozadí, než se načtou dlaždice */
-            border: 1px solid #ccc;
-            /* Dočasný červený rámeček pro kontrolu, že tam ten div je */
-            outline: 2px dashed red; 
-        }
-
-        /* Patička */
-        footer { background: #222; color: #aaa; padding: 60px 0 20px; margin-top: auto; font-size: 14px; }
-        .footer-content { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 40px; margin-bottom: 40px; }
-        .footer-col h3 { color: white; text-transform: uppercase; margin-top: 0; font-family: 'Montserrat', sans-serif; }
-        .copyright { text-align: center; border-top: 1px solid #333; padding-top: 20px; font-size: 12px; }
-
-        @media (max-width: 768px) {
-            .container { flex-direction: column; text-align: center; gap: 15px; }
-            .nav-flex { flex-direction: column; }
-            .footer-content { grid-template-columns: 1fr; }
-            #map { height: 400px; } /* Menší mapa na mobilu */
+            height: 100%;
         }
     </style>
 </head>
 <body>
 
-    <div class="top-bar">
-        <div class="container">
-            <div><i class="fas fa-phone"></i> +420 737 007 015 &nbsp; <i class="far fa-clock"></i> 11:00 - 22:00</div>
-            <div><i class="fab fa-facebook"></i> <i class="fab fa-instagram"></i></div>
-        </div>
-    </div>
+<div id="map"></div>
 
-    <header>
-        <div class="container nav-flex">
-            <a href="#" class="logo">Garden Restaurant <span>Prachárna</span></a>
-            <ul class="menu">
-                <li><a href="#">Home</a></li>
-                <li><a href="#">Denní menu</a></li>
-                <li><a href="#">Galerie</a></li>
-                <li><a href="#" style="color: #7da14f;">Mapa</a></li>
-                <li><a href="#">Kontakt</a></li>
-            </ul>
-        </div>
-    </header>
+<script>
+    var map = L.map('map').setView([49.6075692, 17.2155489], 15);
 
-    <div class="map-wrapper">
-        <div class="container">
-            <div class="title-section">
-                <h2>Naše interaktivní mapa</h2>
-                <div class="line"></div>
-                <p style="color: #777;">Prozkoumejte okolí restaurace a hotelu</p>
-            </div>
+    L.tileLayer('tiles/{z}/{x}/{y}.png', {
+        maxZoom: 23, 
+        minZoom: 14, 
+        attribution: '© MapAnt.cz',
+        opacity: 0.8 
+    }).addTo(map);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; OpenStreetMap contributors',
+        opacity: 1, // Podklad bude mírně průhledný
+        zIndex: -1 // Dáme podklad pod vaši mapu
+    }).addTo(map);
 
-            <div id="map"></div>
-        
-        </div>
-    </div>
-
-    <footer>
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-col">
-                    <h3>Kontakt</h3>
-                    <p>Křelovská 91, Olomouc<br>restaurace@hotel-pracharna.cz<br>+420 737 007 015</p>
-                </div>
-                <div class="footer-col">
-                    <h3>Otevírací doba</h3>
-                    <p>Pondělí - Neděle: 11:00 - 22:00</p>
-                </div>
-                <div class="footer-col">
-                    <h3>O nás</h3>
-                    <p>Garden Restaurant Prachárna je oáza klidu v zeleni.</p>
-                </div>
-            </div>
-            <div class="copyright">© 2025 Garden Restaurant Prachárna. Vytvořeno pro GitHub Pages.</div>
-        </div>
-    </footer>
-
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
-
-    <script>
-        // 1. Inicializace mapy
-        // DŮLEŽITÉ: Ujistěte se, že 'map' odpovídá id="map" v HTML
-        var map = L.map('map').setView([49.6105, 17.2285], 13); // Zoom 13 pro jistotu
-
-        // 2. Přidání dlaždic
-        // Zkuste jednu z těchto dvou cest, pokud první nefunguje:
-        // Varianta A (relativní - většinou funguje nejlépe): './tiles/{z}/{x}/{y}.png'
-        // Varianta B (absolutní): '/nazev-vaseho-repozitare/tiles/{z}/{x}/{y}.png'
-        
-        L.tileLayer('./tiles/{z}/{x}/{y}.png', {
-            minZoom: 0,
-            maxZoom: 23,
-            tms: false, // Zkuste změnit na true, pokud bude mapa "rozházená"
-            attribution: 'Garden Restaurant Prachárna'
-        }).addTo(map);
-
-        // 3. Marker
-        L.marker([49.6105, 17.2285]).addTo(map)
-            .bindPopup("<b>Jsme zde!</b><br>Garden Restaurant Prachárna").openPopup();
-            
-        // 4. Debugging - pokud se mapa nenačte, vypíše chybu
-        map.on('tileerror', function(error, tile) {
-            console.log("Chyba dlaždice:", error.url);
-        });
-    </script>
+</script>
 
 </body>
 </html>
