@@ -188,13 +188,12 @@
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
     <script>
-        // --- 1. ZÁKLADNÍ MAPA ---
         var map = L.map('map').setView([49.6075692, 17.2155489], 19);
 
         L.tileLayer('tiles/{z}/{x}/{y}.png', {
-            maxZoom: 22, 
             minZoom: 16, 
-            attribution: '© MapAnt.cz',
+            maxZoom: 22, 
+            attribution: '© GitHubPages',
             opacity: 0.8 
         }).addTo(map);
 
@@ -205,7 +204,6 @@
         }).addTo(map);
 
 
-        // --- 2. NOVÁ DATA (Vaše JSON data vložena přímo sem) ---
         const geojsonData = {
             "type": "FeatureCollection",
             "features": [
