@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MapAnt.cz – Design Prachárna</title>
+    <title>Garden Restaurant Prachárna – Mapa</title>
     
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     
@@ -11,7 +11,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
     <style>
-        /* --- DESIGN PRACHÁRNA STYLY --- */
         :root {
             --primary-green: #7da14f;
             --dark-grey: #333333;
@@ -56,6 +55,37 @@
         
         /* Samotná mapa */
         #map { width: 100%; height: 100%; z-index: 1; }
+
+        /* --- NOVÉ STYLY PRO TLAČÍTKA GEOJSON --- */
+        .buttons-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 20px;
+            margin-bottom: 25px;
+        }
+
+        .geo-btn {
+            background-color: white;
+            border: 2px solid var(--primary-green);
+            color: var(--dark-grey);
+            padding: 8px 16px;
+            font-family: var(--font-head);
+            font-weight: 600;
+            font-size: 13px;
+            text-transform: uppercase;
+            cursor: pointer;
+            border-radius: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .geo-btn:hover {
+            background-color: var(--primary-green);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
 
         /* Patička */
         footer { background: #222; color: #aaa; padding: 60px 0 20px; font-size: 14px; margin-top: auto; }
@@ -106,6 +136,8 @@
                 <h1>Orientační Mapa</h1>
                 <div class="separator"></div>
                 <p>Prozkoumejte okolí restaurace a hotelu</p>
+                
+                <div id="poi-buttons" class="buttons-container"></div>
             </div>
             
             <div id="map-container">
@@ -133,7 +165,7 @@
                 </div>
             </div>
             <div class="copyright">
-                &copy; 2025 Hotel Prachárna s.r.o. | Powered by MapAnt.cz
+                &copy; 2025 Hotel Prachárna s.r.o. | Powered by GitHub
             </div>
         </div>
     </footer>
@@ -141,8 +173,7 @@
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
     <script>
-        // --- ZDE JE VÁŠ PŮVODNÍ KÓD (BEZE ZMĚN) ---
-        
+        // --- VAŠE PŮVODNÍ FUNKČNÍ KONFIGURACE MAPY ---
         var map = L.map('map').setView([49.6075692, 17.2155489], 19);
 
         L.tileLayer('tiles/{z}/{x}/{y}.png', {
@@ -154,9 +185,57 @@
 
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '&copy; OpenStreetMap contributors',
-            opacity: 1, // Podklad bude mírně průhledný
-            zIndex: -1 // Dáme podklad pod vaši mapu
+            opacity: 1, 
+            zIndex: -1 
         }).addTo(map);
+
+        // --- NOVÝ KÓD PRO NAČTENÍ GEOJSON A TLAČÍTKA ---
+        
+        // Funkce pro načtení GeoJSON souboru
+        fetch('data.geojson')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error("HTTP error " + response.status);
+                }
+                return response.json();
+            })
+            .then(data => {
+                const buttonContainer = document.getElementById('poi-buttons');
+
+                // Projdeme všechny features v GeoJSONu
+                data.features.forEach(feature => {
+                    // Zjistíme, jestli má feature ID (buď přímo na rootu nebo v properties)
+                    const featureId = feature.id || (feature.properties && feature.properties.id);
+
+                    if (featureId && feature.geometry && feature.geometry.type === "Point") {
+                        // Vytvoření tlačítka
+                        const btn = document.createElement('button');
+                        btn.className = 'geo-btn';
+                        btn.textContent = featureId; // Text tlačítka je ID
+
+                        // Akce po kliknutí - Zoom na bod
+                        btn.onclick = function() {
+                            // GeoJSON má souřadnice [Lon, Lat], Leaflet chce [Lat, Lon] -> musíme otočit
+                            const coords = feature.geometry.coordinates;
+                            const lat = coords[1];
+                            const lon = coords[0];
+
+                            // Plynulý přesun na bod (flyTo) s vysokým zoomem
+                            map.flyTo([lat, lon], 21, {
+                                animate: true,
+                                duration: 1.5 // délka animace v sekundách
+                            });
+                        };
+
+                        buttonContainer.appendChild(btn);
+                    }
+                });
+            })
+            .catch(error => {
+                console.error('Chyba při načítání data.geojson:', error);
+                // Volitelně: vypsat chybu do stránky, pokud soubor chybí
+                // document.getElementById('poi-buttons').innerHTML = "Nepodařilo se načíst body zájmu.";
+            });
 
     </script>
 </body>
