@@ -56,7 +56,7 @@
         /* Samotná mapa */
         #map { width: 100%; height: 100%; z-index: 1; }
 
-        /* --- NOVÉ STYLY PRO TLAČÍTKA GEOJSON --- */
+        /* --- STYLY PRO TLAČÍTKA GEOJSON --- */
         .buttons-container {
             display: flex;
             flex-wrap: wrap;
@@ -173,7 +173,7 @@
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
     <script>
-        // --- VAŠE PŮVODNÍ FUNKČNÍ KONFIGURACE MAPY ---
+        // --- ZDE JE VÁŠ PŮVODNÍ KÓD MAPY (BEZE ZMĚN) ---
         var map = L.map('map').setView([49.6075692, 17.2155489], 19);
 
         L.tileLayer('tiles/{z}/{x}/{y}.png', {
@@ -189,10 +189,12 @@
             zIndex: -1 
         }).addTo(map);
 
-        // --- NOVÝ KÓD PRO NAČTENÍ GEOJSON A TLAČÍTKA ---
+        // --- NAČTENÍ GEOJSON Z GISTU A VYTVOŘENÍ TLAČÍTEK ---
         
-        // Funkce pro načtení GeoJSON souboru
-        fetch('data.geojson')
+        // URL adresa vašeho raw geojsonu
+        const geojsonUrl = 'https://gist.githubusercontent.com/pkubecek/8160bfb577b1cd25bdab6ca018f83b98/raw/2dc0da367e497c537e8105c628c9c86cede26cb4/data.geojson';
+
+        fetch(geojsonUrl)
             .then(response => {
                 if (!response.ok) {
                     throw new Error("HTTP error " + response.status);
@@ -215,7 +217,7 @@
 
                         // Akce po kliknutí - Zoom na bod
                         btn.onclick = function() {
-                            // GeoJSON má souřadnice [Lon, Lat], Leaflet chce [Lat, Lon] -> musíme otočit
+                            // GeoJSON má souřadnice [Lon, Lat], Leaflet chce [Lat, Lon]
                             const coords = feature.geometry.coordinates;
                             const lat = coords[1];
                             const lon = coords[0];
@@ -223,7 +225,7 @@
                             // Plynulý přesun na bod (flyTo) s vysokým zoomem
                             map.flyTo([lat, lon], 21, {
                                 animate: true,
-                                duration: 1.5 // délka animace v sekundách
+                                duration: 1.5 
                             });
                         };
 
@@ -232,9 +234,7 @@
                 });
             })
             .catch(error => {
-                console.error('Chyba při načítání data.geojson:', error);
-                // Volitelně: vypsat chybu do stránky, pokud soubor chybí
-                // document.getElementById('poi-buttons').innerHTML = "Nepodařilo se načíst body zájmu.";
+                console.error('Chyba při načítání GeoJSON:', error);
             });
 
     </script>
