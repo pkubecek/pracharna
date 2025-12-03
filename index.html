@@ -9,117 +9,10 @@
     
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
 
-    <style>
-        :root {
-            --primary-green: #7da14f;
-            --dark-grey: #333333;
-            --light-bg: #f4f4f4;
-            --font-head: 'Montserrat', sans-serif;
-            --font-body: 'Open Sans', sans-serif;
-        }
-
-        body { margin: 0; padding: 0; font-family: var(--font-body); color: var(--dark-grey); display: flex; flex-direction: column; min-height: 100vh; }
-        a { text-decoration: none; color: inherit; transition: 0.3s; }
-        a:hover { color: var(--primary-green); }
-
-        /* Horní lišta */
-        .top-bar { background: #f8f8f8; border-bottom: 1px solid #ddd; padding: 8px 0; font-size: 13px; color: #666; }
-        .container { max-width: 1140px; margin: 0 auto; padding: 0 15px; display: flex; justify-content: space-between; align-items: center; }
-        .top-icons span { margin-right: 15px; } .top-icons i { color: var(--primary-green); margin-right: 5px; }
-        
-        /* Navigace */
-        header { background: white; padding: 20px 0; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); z-index: 1000; position: relative; }
-        .nav-flex { display: flex; justify-content: space-between; align-items: center; }
-        .logo { font-family: var(--font-head); font-size: 24px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; }
-        .logo span { color: var(--primary-green); }
-        .menu { list-style: none; display: flex; gap: 25px; margin: 0; padding: 0; }
-        .menu a { font-family: var(--font-head); font-weight: 600; text-transform: uppercase; font-size: 14px; letter-spacing: 0.5px; }
-        .menu a.active { color: var(--primary-green); }
-
-        /* Obsah stránky */
-        .content-area { flex: 1; background: var(--light-bg); padding: 40px 0; }
-        .page-title { text-align: center; margin-bottom: 30px; }
-        .page-title h1 { font-family: var(--font-head); text-transform: uppercase; font-weight: 400; margin: 0; letter-spacing: 2px; }
-        .separator { height: 2px; width: 50px; background: var(--primary-green); margin: 15px auto; }
-        
-        /* Mapa */
-        #map-container {
-            width: 100%;
-            height: 70vh;
-            min-height: 500px;
-            background: #e0e0e0;
-            border: 5px solid white;
-            box-shadow: 0 0 15px rgba(0,0,0,0.1);
-        }
-        #map { width: 100%; height: 100%; z-index: 1; }
-
-        /* Tlačítka GeoJSON */
-        .buttons-container {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 10px;
-            margin-top: 20px;
-            margin-bottom: 25px;
-        }
-
-        .geo-btn {
-            background-color: white;
-            border: 2px solid var(--primary-green);
-            color: var(--dark-grey);
-            padding: 8px 16px;
-            font-family: var(--font-head);
-            font-weight: 600;
-            font-size: 13px;
-            text-transform: uppercase;
-            cursor: pointer;
-            border-radius: 20px;
-            transition: all 0.3s ease;
-        }
-
-        .geo-btn:hover {
-            background-color: var(--primary-green);
-            color: white;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-        }
-
-        /* Vlastní styl markerů na mapě */
-        .custom-map-marker {
-            background-color: var(--primary-green);
-            border: 2px solid white;
-            border-radius: 50%;
-            color: white;
-            display: flex !important;
-            justify-content: center;
-            align-items: center;
-            box-shadow: 0 3px 6px rgba(0,0,0,0.3);
-            transition: transform 0.2s;
-        }
-        .custom-map-marker:hover {
-            transform: scale(1.1);
-            background-color: #5e7a3b;
-            z-index: 1000 !important;
-        }
-
-        /* Patička */
-        footer { background: #222; color: #aaa; padding: 60px 0 20px; font-size: 14px; margin-top: auto; }
-        .footer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 30px; margin-bottom: 40px; }
-        .footer-col h4 { color: white; text-transform: uppercase; margin-top: 0; letter-spacing: 1px; font-family: var(--font-head); }
-        .footer-col p { line-height: 1.6; margin-bottom: 10px; }
-        .copyright { text-align: center; border-top: 1px solid #333; padding-top: 20px; font-size: 12px; }
-
-        @media(max-width: 768px) {
-            .container { flex-direction: column; text-align: center; gap: 10px; }
-            .nav-flex { flex-direction: column; gap: 20px; }
-            .menu { flex-direction: column; gap: 10px; }
-            #map-container { height: 400px; min-height: auto; }
-        }
-    </style>
 </head>
 <body>
-
     <div class="top-bar">
         <div class="container">
             <div class="top-icons">
@@ -127,20 +20,19 @@
                 <span><i class="far fa-clock"></i> 11:00 - 22:00</span>
             </div>
             <div class="socials">
-                <a href="#"><i class="fab fa-facebook"></i></a>
-                <a href="#"><i class="fab fa-instagram"></i></a>
+                <a href="https://www.facebook.com/pracharna.olomouc/?locale=cs_CZ" target="_blank" rel="noopener noreferrer"><i class="fab fa-facebook"></i></a>
+                <a href="https://www.instagram.com/pracharna_olomouc/" target="_blank" rel="noopener noreferrer"><i class="fab fa-instagram"></i></a>
             </div>
         </div>
     </div>
-
     <header>
         <div class="container nav-flex">
-            <a href="#" class="logo">Garden Restaurant <span>Prachárna</span></a>
+            <a href="index.html" class="logo">Garden Restaurant <span>Prachárna</span></a>
             <ul class="menu">
-                <li><a href="#">Domů</a></li>
-                <li><a href="#">Menu</a></li>
-                <li><a href="#" class="active">Mapa</a></li>
-                <li><a href="#">Kontakt</a></li>
+                <li><a href="index.html" class="active">Domů</a></li>
+                <li><a href="galerie.html">Galerie</a></li>
+                <li><a href="JidelniListek.pdf" target="_blank" rel="noopener noreferrer">Jídelní lístek</a></li>
+                <li><a href="#kontakt-sekce">Kontakt</a></li>
             </ul>
         </div>
     </header>
@@ -161,7 +53,7 @@
         </div>
     </div>
 
-    <footer>
+    <footer id="kontakt-sekce">
         <div class="container">
             <div class="footer-grid">
                 <div class="footer-col">
@@ -189,21 +81,24 @@
 
     <script>
         var map = L.map('map', {
-            minZoom: 16,
+            minZoom: 14,
             maxZoom: 22
         }).setView([49.6075692, 17.2155489], 19);
         L.tileLayer('tiles/{z}/{x}/{y}.png', {
-            minZoom: 16,
+            minZoom: 14,
             maxZoom: 22,
             attribution: '© GitHubPages',
             opacity: 0.8 
         }).addTo(map);
 
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '&copy; OpenStreetMap contributors',
-            opacity: 1, 
-            zIndex: -1 
-        }).addTo(map);
+        var CartoDB_Positron = L.layerGroup([
+            L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+	        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+            zIndex: -1
+        })
+        ]);
+
+        CartoDB_Positron.addTo(map);
 
 
         const geojsonData = {
@@ -276,6 +171,7 @@
                 buttonContainer.appendChild(btn);
             }
         });
+        L.control.scale().addTo(map);
 
     </script>
 </body>
