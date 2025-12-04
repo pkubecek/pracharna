@@ -1,169 +1,262 @@
 <!DOCTYPE html>
 <html lang="cs">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Garden Restaurant Prachárna – Mapa</title>
-    
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-    
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="style.css">
 
-</head>
-<body>
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.fullscreen/2.4.0/Control.FullScreen.min.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700&family=Open+Sans:wght@400;600&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
     <div class="top-bar">
-        <div class="container">
-            <div class="top-icons">
-                <span><i class="fas fa-phone"></i> <a href="tel:+420737007015">+420 737 007 015</a></span>
-                <span><i class="far fa-clock"></i> 11:00 - 22:00</span>
-            </div>
-            <div class="socials">
-                <a href="https://www.facebook.com/pracharna.olomouc/?locale=cs_CZ" target="_blank" rel="noopener noreferrer"><i class="fab fa-facebook"></i></a>
-                <a href="https://www.instagram.com/pracharna_olomouc/" target="_blank" rel="noopener noreferrer"><i class="fab fa-instagram"></i></a>
-            </div>
+      <div class="container">
+        <div class="top-icons">
+          <span
+            ><i class="fas fa-phone"></i>
+            <a href="tel:+420737007015">+420 737 007 015</a></span
+          >
+          <span><i class="far fa-clock"></i> 11:00 - 22:00</span>
         </div>
+        <div class="socials">
+          <a
+            href="https://www.facebook.com/pracharna.olomouc/?locale=cs_CZ"
+            target="_blank"
+            rel="noopener noreferrer"
+            ><i class="fab fa-facebook"></i
+          ></a>
+          <a
+            href="https://www.instagram.com/pracharna_olomouc/"
+            target="_blank"
+            rel="noopener noreferrer"
+            ><i class="fab fa-instagram"></i
+          ></a>
+        </div>
+      </div>
     </div>
     <header>
-        <div class="container nav-flex">
-            <a href="index.html" class="logo">Garden Restaurant <span>Prachárna</span></a>
-            <ul class="menu">
-                <li><a href="index.html" class="active">Domů</a></li>
-                <li><a href="galerie.html">Galerie</a></li>
-                <li><a href="JidelniListek.pdf" target="_blank" rel="noopener noreferrer">Jídelní lístek</a></li>
-                <li><a href="#kontakt-sekce">Kontakt</a></li>
-            </ul>
-        </div>
+      <div class="container nav-flex">
+        <a href="https://restaurant-pracharna.cz/" class="logo" target="_blank"
+          >Garden Restaurant <span>Prachárna</span></a
+        >
+        <ul class="menu">
+          <li><a href="index.html" class="active">Domů</a></li>
+          <li><a href="galerie.html">Galerie</a></li>
+          <li>
+            <a
+              href="JidelniListek.pdf"
+              target="_blank"
+              rel="noopener noreferrer"
+              >Jídelní lístek</a
+            >
+          </li>
+          <li><a href="#kontakt-sekce">Kontakt</a></li>
+        </ul>
+      </div>
     </header>
 
     <div class="content-area">
-        <div class="container">
-            <div class="page-title">
-                <h1>Orientační Mapa</h1>
-                <div class="separator"></div>
-                <p>Prozkoumejte okolí restaurace a hotelu</p>
-                
-                <div id="poi-buttons" class="buttons-container"></div>
-            </div>
-            
-            <div id="map-container">
-                <div id="map"></div>
-            </div>
+      <div class="container">
+        <div class="page-title">
+          <h1>Orientační Mapa</h1>
+          <div class="separator"></div>
+          <p>Prozkoumejte okolí restaurace a hotelu</p>
+
+          <div id="poi-buttons" class="buttons-container"></div>
         </div>
+
+        <div id="map-container">
+          <div id="map"></div>
+        </div>
+      </div>
     </div>
 
     <footer id="kontakt-sekce">
-        <div class="container">
-            <div class="footer-grid">
-                <div class="footer-col">
-                    <h4>Kontakt</h4>
-                    <p><a href="https://mapy.com/s/faheguvevo" target="_blank">Křelovská 91, Olomouc</a><br>
-                    <a href="mailto:restaurace@hotel-pracharna.cz">restaurace@hotel-pracharna.cz</a><br>
-                    <a href="tel:+420737007015">+420 737 007 015</a></p>
-                </div>
-                <div class="footer-col">
-                    <h4>Otevírací doba</h4>
-                    <p>Pondělí - Neděle<br>11:00 - 22:00</p>
-                </div>
-                <div class="footer-col">
-                    <h4>O nás</h4>
-                    <p>Stylová restaurace v přírodním prostředí s výhledem na rybník.</p>
-                </div>
-            </div>
-            <div class="copyright">
-                &copy; 2025 Hotel Prachárna s.r.o. | Powered by <a href="https://pages.github.com/">GitHub</a>
-            </div>
+      <div class="container">
+        <div class="footer-grid">
+          <div class="footer-col">
+            <h4>Kontakt</h4>
+            <p>
+              <a href="https://mapy.com/s/faheguvevo" target="_blank"
+                >Křelovská 91, Olomouc</a
+              ><br />
+              <a href="mailto:restaurace@hotel-pracharna.cz"
+                >restaurace@hotel-pracharna.cz</a
+              ><br />
+              <a href="tel:+420737007015">+420 737 007 015</a>
+            </p>
+          </div>
+          <div class="footer-col">
+            <h4>Otevírací doba</h4>
+            <p>Pondělí - Neděle<br />11:00 - 22:00</p>
+          </div>
+          <div class="footer-col">
+            <h4>O nás</h4>
+            <p>
+              Stylová restaurace v přírodním prostředí s výhledem na rybník.
+            </p>
+          </div>
         </div>
+        <div class="copyright">
+          &copy; 2025 Hotel Prachárna s.r.o. | Powered by
+          <a href="https://pages.github.com/">GitHub</a>
+        </div>
+      </div>
     </footer>
 
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.fullscreen/2.4.0/Control.FullScreen.min.js"></script>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
     <script>
-        var map = L.map('map', {
-            minZoom: 14,
-            maxZoom: 22
-        }).setView([49.6075692, 17.2155489], 19);
-        L.tileLayer('tiles/{z}/{x}/{y}.png', {
-            minZoom: 14,
-            maxZoom: 22,
-            attribution: '© GitHubPages',
-            opacity: 0.8 
-        }).addTo(map);
+      var map = L.map("map", {
+        minZoom: 14,
+        maxZoom: 22,
+      }).setView([49.6075692, 17.2155489], 18);
+      L.tileLayer("tiles/{z}/{x}/{y}.png", {
+        minZoom: 14,
+        maxZoom: 22,
+        attribution: "© GitHubPages",
+        opacity: 0.8,
+      }).addTo(map);
 
-        var CartoDB_Positron = L.layerGroup([
-            L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
-	        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
-            zIndex: -1
-        })
-        ]);
+      var CartoDB_Positron = L.layerGroup([
+        L.tileLayer(
+          "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png",
+          {
+            attribution:
+              '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+            zIndex: -1,
+          }
+        ),
+      ]);
 
-        CartoDB_Positron.addTo(map);
+      CartoDB_Positron.addTo(map);
 
+      const geojsonData = {
+        type: "FeatureCollection",
+        features: [
+          {
+            type: "Feature",
+            properties: { id: "hotel" },
+            geometry: {
+              coordinates: [17.216397640283134, 49.607922856679494],
+              type: "Point",
+            },
+          },
+          {
+            type: "Feature",
+            properties: { id: "zastávka" },
+            geometry: {
+              coordinates: [17.213482705394085, 49.60703339880715],
+              type: "Point",
+            },
+          },
+          {
+            type: "Feature",
+            properties: { id: "zahrada" },
+            geometry: {
+              coordinates: [17.217088143494067, 49.60784511180168],
+              type: "Point",
+            },
+          },
+          {
+            type: "Feature",
+            properties: { id: "rybník" },
+            geometry: {
+              coordinates: [17.215041904152088, 49.60785809321166],
+              type: "Point",
+            },
+          },
+          {
+            type: "Feature",
+            properties: { id: "restaurace" },
+            geometry: {
+              coordinates: [17.213910689019002, 49.60701477163113],
+              type: "Point",
+            },
+          },
+          {
+            type: "Feature",
+            properties: { id: "parkoviště" },
+            geometry: {
+              coordinates: [17.216597581509546, 49.6074690589183],
+              type: "Point",
+            },
+          },
+        ],
+      };
 
-        const geojsonData = {
-            "type": "FeatureCollection",
-            "features": [
-                {"type":"Feature","properties":{"id":"hotel"},"geometry":{"coordinates":[17.216397640283134,49.607922856679494],"type":"Point"}},
-                {"type":"Feature","properties":{"id":"zastávka"},"geometry":{"coordinates":[17.213482705394085,49.60703339880715],"type":"Point"}},
-                {"type":"Feature","properties":{"id":"zahrada"},"geometry":{"coordinates":[17.217088143494067,49.60784511180168],"type":"Point"}},
-                {"type":"Feature","properties":{"id":"rybník"},"geometry":{"coordinates":[17.215041904152088,49.60785809321166],"type":"Point"}},
-                {"type":"Feature","properties":{"id":"restaurace"},"geometry":{"coordinates":[17.213910689019002,49.60701477163113],"type":"Point"}},
-                {"type":"Feature","properties":{"id":"parkoviště"},"geometry":{"coordinates":[17.216597581509546,49.6074690589183],"type":"Point"}}
-            ]
-        };
+      const iconMapping = {
+        parkoviště: "fa-square-parking",
+        hotel: "fa-bed",
+        zastávka: "fa-bus",
+        restaurace: "fa-utensils",
+        rybník: "fa-water",
+        zahrada: "fa-tree",
+        default: "fa-map-pin",
+      };
 
-        const iconMapping = {
-            'parkoviště': 'fa-square-parking',
-            'hotel':      'fa-bed',
-            'zastávka':   'fa-bus',
-            'restaurace': 'fa-utensils',
-            'rybník':     'fa-water',
-            'zahrada':    'fa-tree',
-            'default':    'fa-map-pin'
-        };
+      const buttonContainer = document.getElementById("poi-buttons");
 
+      geojsonData.features.forEach((feature) => {
+        const id = feature.properties ? feature.properties.id : null;
 
-        const buttonContainer = document.getElementById('poi-buttons');
+        if (id && feature.geometry.type === "Point") {
+          const [lon, lat] = feature.geometry.coordinates;
 
-        geojsonData.features.forEach(feature => {
-            const id = feature.properties ? feature.properties.id : null;
-            
-            if (id && feature.geometry.type === "Point") {
-                const [lon, lat] = feature.geometry.coordinates;
+          const iconClass = iconMapping[id] || iconMapping["default"];
 
-                const iconClass = iconMapping[id] || iconMapping['default'];
+          const customIcon = L.divIcon({
+            className: "custom-map-marker",
+            html: `<i class="fas ${iconClass}" style="font-size: 16px;"></i>`,
+            iconSize: [36, 36],
+            iconAnchor: [18, 18],
+            popupAnchor: [0, -20],
+          });
 
-                const customIcon = L.divIcon({
-                    className: 'custom-map-marker',
-                    html: `<i class="fas ${iconClass}" style="font-size: 16px;"></i>`,
-                    iconSize: [36, 36],
-                    iconAnchor: [18, 18],
-                    popupAnchor: [0, -20]
-                });
+          const marker = L.marker([lat, lon], { icon: customIcon }).addTo(map);
 
-                const marker = L.marker([lat, lon], {icon: customIcon}).addTo(map);
-                
-                const title = id.charAt(0).toUpperCase() + id.slice(1);
-                marker.bindPopup(`<b>${title}</b>`);
+          const title = id.charAt(0).toUpperCase() + id.slice(1);
+          marker.bindPopup(`<b>${title}</b>`);
 
-                const btn = document.createElement('button');
-                btn.className = 'geo-btn';
-                btn.innerHTML = `<i class="fas ${iconClass}"></i> ${id}`;
-                
-                btn.onclick = function() {
-                    map.flyTo([lat, lon], 22, {
-                        animate: true,
-                        duration: 1.5
-                    });
-                    marker.openPopup();
-                };
+          const btn = document.createElement("button");
+          btn.className = "geo-btn";
+          btn.innerHTML = `<i class="fas ${iconClass}"></i> ${id}`;
 
-                buttonContainer.appendChild(btn);
-            }
-        });
-        L.control.scale().addTo(map);
+          btn.onclick = function () {
+            map.flyTo([lat, lon], 22, {
+              animate: true,
+              duration: 1.5,
+            });
+            marker.openPopup();
+          };
 
+          buttonContainer.appendChild(btn);
+        }
+      });
+      L.control.scale().addTo(map);
     </script>
-</body>
+  </body>
 </html>

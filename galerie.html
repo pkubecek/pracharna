@@ -1,155 +1,211 @@
 <!DOCTYPE html>
 <html lang="cs">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Garden Restaurant Prachárna – Fotogalerie</title>
-    
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
+
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700&family=Open+Sans:wght@400;600&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
     <div class="top-bar">
-        <div class="container">
-            <div class="top-icons">
-            <span><i class="fas fa-phone"></i> <a href="tel:+420737007015">+420 737 007 015</a></span>
-            <span><i class="far fa-clock"></i> 11:00 - 22:00</span>
-            </div>
-            <div class="socials">
-                <a href="https://www.facebook.com/pracharna.olomouc/?locale=cs_CZ" target="_blank" rel="noopener noreferrer"><i class="fab fa-facebook"></i></a>
-                <a href="https://www.instagram.com/pracharna_olomouc/" target="_blank" rel="noopener noreferrer"><i class="fab fa-instagram"></i></a>
-            </div>
+      <div class="container">
+        <div class="top-icons">
+          <span
+            ><i class="fas fa-phone"></i>
+            <a href="tel:+420737007015">+420 737 007 015</a></span
+          >
+          <span><i class="far fa-clock"></i> 11:00 - 22:00</span>
         </div>
+        <div class="socials">
+          <a
+            href="https://www.facebook.com/pracharna.olomouc/?locale=cs_CZ"
+            target="_blank"
+            rel="noopener noreferrer"
+            ><i class="fab fa-facebook"></i
+          ></a>
+          <a
+            href="https://www.instagram.com/pracharna_olomouc/"
+            target="_blank"
+            rel="noopener noreferrer"
+            ><i class="fab fa-instagram"></i
+          ></a>
+        </div>
+      </div>
     </div>
     <header>
-        <div class="container nav-flex">
-            <a href="index.html" class="logo">Garden Restaurant <span>Prachárna</span></a>
-            <ul class="menu">
-                <li><a href="index.html">Domů</a></li>
-                <li><a href="galerie.html" class="active">Galerie</a></li>
-                <li><a href="JidelniListek.pdf" target="_blank" rel="noopener noreferrer">Jídelní lístek</a></li>
-                <li><a href="#kontakt-sekce">Kontakt</a></li>
-            </ul>
-        </div>
+      <div class="container nav-flex">
+        <a href="https://restaurant-pracharna.cz/" class="logo" target="_blank"
+          >Garden Restaurant <span>Prachárna</span></a
+        >
+        <ul class="menu">
+          <li><a href="index.html">Domů</a></li>
+          <li><a href="galerie.html" class="active">Galerie</a></li>
+          <li>
+            <a
+              href="JidelniListek.pdf"
+              target="_blank"
+              rel="noopener noreferrer"
+              >Jídelní lístek</a
+            >
+          </li>
+          <li><a href="#kontakt-sekce">Kontakt</a></li>
+        </ul>
+      </div>
     </header>
 
     <div class="content-area">
-        <div class="video-hero">
-            <video autoplay muted loop>
-                <source src="Videa/prulet1-min.mp4" type="video/mp4">
-                Váš prohlížeč nepodporuje HTML5 video.
-            </video>
-            <div class="video-overlay"></div>
-            <h1>Fotogalerie</h1>
-            
-            <a href="#galerie-obsah-wrapper" class="scroll-down-arrow" aria-label="Přejít na galerii">
-                <i class="fas fa-chevron-down"></i>
-            </a>
-        </div>
-        
-        <div class="full-width-title" id="galerie-obsah-wrapper">
-            <h2>Prohlédněte si okolí naší restaurace</h2>
-            <div class="separator"></div>
-        </div>
+      <div class="video-hero">
+        <video autoplay muted loop>
+          <source src="Videa/prulet1-min.mp4" type="video/mp4" />
+          Váš prohlížeč nepodporuje HTML5 video.
+        </video>
+        <div class="video-overlay"></div>
+        <h1>Fotogalerie</h1>
 
-        <div class="horizontal-scroll-wrapper">
-            <div class="photo-grid">
-                <div class="galerie-item" onclick="openModal('FotkyNavic/DJI_0158-min.JPG', 'Exteriér restaurace')">
-                    <div class="placeholder">
-                        <img src="FotkyNavic/DJI_0158-min.JPG" alt="Exteriér restaurace">
-                    </div>
-                    <p>Exteriér restaurace</p>
-                </div>
-                <div class="galerie-item" onclick="openModal('FotkyNavic/DJI_0358-min.JPG', 'Hotel')">
-                    <div class="placeholder">
-                        <img src="FotkyNavic/DJI_0358-min.JPG" alt="Hotel">
-                    </div>
-                    <p>Hotel</p>
-                </div>
-                <div class="galerie-item" onclick="openModal('FotkyNavic/DJI_0153-min.JPG', 'Rybníček')">
-                    <div class="placeholder">
-                        <img src="FotkyNavic/DJI_0153-min.JPG" alt="Rybníček">
-                    </div>
-                    <p>Rybníček</p>
-                </div>
-                <div class="galerie-item" onclick="openModal('FotkyNavic/DJI_0003-min.JPG', 'Areál')">
-                    <div class="placeholder">
-                        <img src="FotkyNavic/DJI_0003-min.JPG" alt="Areál">
-                    </div>
-                    <p>Areál</p>
-                </div>
+        <a
+          href="#galerie-obsah-wrapper"
+          class="scroll-down-arrow"
+          aria-label="Přejít na galerii"
+        >
+          <i class="fas fa-chevron-down"></i>
+        </a>
+      </div>
 
+      <div class="full-width-title" id="galerie-obsah-wrapper">
+        <h2>Prohlédněte si okolí naší restaurace</h2>
+        <div class="separator"></div>
+      </div>
+
+      <div class="horizontal-scroll-wrapper">
+        <div class="photo-grid">
+          <div
+            class="galerie-item"
+            onclick="openModal('FotkyNavic/DJI_0158-min.JPG', 'Exteriér restaurace')"
+          >
+            <div class="placeholder">
+              <img
+                src="FotkyNavic/DJI_0158-min.JPG"
+                alt="Exteriér restaurace"
+              />
             </div>
+            <p>Exteriér restaurace</p>
+          </div>
+          <div
+            class="galerie-item"
+            onclick="openModal('FotkyNavic/DJI_0358-min.JPG', 'Hotel')"
+          >
+            <div class="placeholder">
+              <img src="FotkyNavic/DJI_0358-min.JPG" alt="Hotel" />
+            </div>
+            <p>Hotel</p>
+          </div>
+          <div
+            class="galerie-item"
+            onclick="openModal('FotkyNavic/DJI_0153-min.JPG', 'Rybníček')"
+          >
+            <div class="placeholder">
+              <img src="FotkyNavic/DJI_0153-min.JPG" alt="Rybníček" />
+            </div>
+            <p>Rybníček</p>
+          </div>
+          <div
+            class="galerie-item"
+            onclick="openModal('FotkyNavic/DJI_0003-min.JPG', 'Areál')"
+          >
+            <div class="placeholder">
+              <img src="FotkyNavic/DJI_0003-min.JPG" alt="Areál" />
+            </div>
+            <p>Areál</p>
+          </div>
         </div>
-        
+      </div>
     </div>
 
     <footer id="kontakt-sekce">
-        <div class="container">
-            <div class="footer-grid">
-                <div class="footer-col">
-                    <h4>Kontakt</h4>
-                    <p><a href="https://mapy.com/s/faheguvevo" target="_blank">Křelovská 91, Olomouc</a><br>
-                    <a href="mailto:restaurace@hotel-pracharna.cz">restaurace@hotel-pracharna.cz</a><br>
-                    <a href="tel:+420737007015">+420 737 007 015</a></p>
-                </div>
-                <div class="footer-col">
-                    <h4>Otevírací doba</h4>
-                    <p>Pondělí - Neděle<br>11:00 - 22:00</p>
-                </div>
-                <div class="footer-col">
-                    <h4>O nás</h4>
-                    <p>Stylová restaurace v přírodním prostředí s výhledem na rybník.</p>
-                </div>
-            </div>
-            <div class="copyright">
-                &copy; 2025 Hotel Prachárna s.r.o. | Powered by <a href="https://pages.github.com/">GitHub</a>
-            </div>
+      <div class="container">
+        <div class="footer-grid">
+          <div class="footer-col">
+            <h4>Kontakt</h4>
+            <p>
+              <a href="https://mapy.com/s/faheguvevo" target="_blank"
+                >Křelovská 91, Olomouc</a
+              ><br />
+              <a href="mailto:restaurace@hotel-pracharna.cz"
+                >restaurace@hotel-pracharna.cz</a
+              ><br />
+              <a href="tel:+420737007015">+420 737 007 015</a>
+            </p>
+          </div>
+          <div class="footer-col">
+            <h4>Otevírací doba</h4>
+            <p>Pondělí - Neděle<br />11:00 - 22:00</p>
+          </div>
+          <div class="footer-col">
+            <h4>O nás</h4>
+            <p>
+              Stylová restaurace v přírodním prostředí s výhledem na rybník.
+            </p>
+          </div>
         </div>
+        <div class="copyright">
+          &copy; 2025 Hotel Prachárna s.r.o. | Powered by
+          <a href="https://pages.github.com/">GitHub</a>
+        </div>
+      </div>
     </footer>
-    
+
     <div id="imageModal" class="modal">
-        <span class="close" onclick="closeModal()">&times;</span>
-        <img class="modal-content" id="img01" src="#" alt="Detail fotografie">
-        </div>
+      <span class="close" onclick="closeModal()">&times;</span>
+      <img class="modal-content" id="img01" src="#" alt="Detail fotografie" />
+    </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const arrow = document.querySelector('.scroll-down-arrow');
-            if (arrow) {
-                arrow.addEventListener('click', function(e) {
-                    e.preventDefault(); 
-                    const targetElement = document.querySelector(this.getAttribute('href'));
-                    
-                    if (targetElement) {
-                        targetElement.scrollIntoView({
-                            behavior: 'smooth',
-                            block: 'start'
-                        });
-                    }
-                });
+      document.addEventListener("DOMContentLoaded", () => {
+        const arrow = document.querySelector(".scroll-down-arrow");
+        if (arrow) {
+          arrow.addEventListener("click", function (e) {
+            e.preventDefault();
+            const targetElement = document.querySelector(
+              this.getAttribute("href")
+            );
+
+            if (targetElement) {
+              targetElement.scrollIntoView({
+                behavior: "smooth",
+                block: "start",
+              });
             }
-        });
-
-        const modal = document.getElementById("imageModal");
-        const modalImg = document.getElementById("img01");
-
-        function openModal(imageSrc, altText) {
-            modal.style.display = "block";
-            modalImg.src = imageSrc;
-            modalImg.alt = altText;
+          });
         }
+      });
 
-        function closeModal() {
-            modal.style.display = "none";
+      const modal = document.getElementById("imageModal");
+      const modalImg = document.getElementById("img01");
+
+      function openModal(imageSrc, altText) {
+        modal.style.display = "block";
+        modalImg.src = imageSrc;
+        modalImg.alt = altText;
+      }
+
+      function closeModal() {
+        modal.style.display = "none";
+      }
+
+      modal.onclick = function (event) {
+        if (event.target === modal) {
+          closeModal();
         }
-        
-        modal.onclick = function(event) {
-            if (event.target === modal) {
-                closeModal();
-            }
-        }
+      };
     </script>
-</body>
+  </body>
 </html>
