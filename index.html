@@ -113,33 +113,27 @@
             ]
         };
 
-        // --- 3. PÁROVÁNÍ IKON (Upraveno na česká ID) ---
         const iconMapping = {
-            'parkoviště': 'fa-square-parking', // P
-            'hotel':      'fa-bed',            // Postel
-            'zastávka':   'fa-bus',            // Autobus
-            'restaurace': 'fa-utensils',       // Příbor
-            'rybník':     'fa-water',          // Voda
-            'zahrada':    'fa-tree',           // Strom
-            'default':    'fa-map-pin'         // Ostatní
+            'parkoviště': 'fa-square-parking',
+            'hotel':      'fa-bed',
+            'zastávka':   'fa-bus',
+            'restaurace': 'fa-utensils',
+            'rybník':     'fa-water',
+            'zahrada':    'fa-tree',
+            'default':    'fa-map-pin'
         };
 
 
-        // --- 4. ZPRACOVÁNÍ DAT ---
         const buttonContainer = document.getElementById('poi-buttons');
 
         geojsonData.features.forEach(feature => {
-            // Bezpečné získání ID z properties
             const id = feature.properties ? feature.properties.id : null;
             
             if (id && feature.geometry.type === "Point") {
                 const [lon, lat] = feature.geometry.coordinates;
 
-                // 1. Výběr ikonky
-                // Pokud ID v seznamu není, použije se 'default'
                 const iconClass = iconMapping[id] || iconMapping['default'];
 
-                // 2. Vytvoření markeru
                 const customIcon = L.divIcon({
                     className: 'custom-map-marker',
                     html: `<i class="fas ${iconClass}" style="font-size: 16px;"></i>`,
@@ -150,17 +144,14 @@
 
                 const marker = L.marker([lat, lon], {icon: customIcon}).addTo(map);
                 
-                // Formátování názvu pro bublinu (Parkoviště místo parkoviště)
                 const title = id.charAt(0).toUpperCase() + id.slice(1);
                 marker.bindPopup(`<b>${title}</b>`);
 
-                // 3. Vytvoření tlačítka
                 const btn = document.createElement('button');
                 btn.className = 'geo-btn';
                 btn.innerHTML = `<i class="fas ${iconClass}"></i> ${id}`;
                 
                 btn.onclick = function() {
-                    // Zoom a otevření bubliny
                     map.flyTo([lat, lon], 22, {
                         animate: true,
                         duration: 1.5
