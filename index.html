@@ -9,14 +9,7 @@
       rel="stylesheet"
       href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
     />
-    <link
-      rel="stylesheet"
-      href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-    />
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.fullscreen/2.4.0/Control.FullScreen.min.css"
-    />
+
     <link
       href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700&family=Open+Sans:wght@400;600&display=swap"
       rel="stylesheet"
@@ -124,35 +117,118 @@
     </footer>
 
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.fullscreen/2.4.0/Control.FullScreen.min.js"></script>
-
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-
     <script>
+      var CartoDB_Positron = L.tileLayer(
+        "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png",
+        {
+          attribution:
+            '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+          subdomains: "abcd",
+          maxZoom: 22,
+          maxNativeZoom: 19,
+        }
+      );
+
+      var Esri_WorldImagery = L.tileLayer(
+        "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
+        {
+          attribution: "Tiles &copy; Esri &mdash; Source: Esri",
+          maxZoom: 22,
+          maxNativeZoom: 18,
+        }
+      );
+
+      var corner1 = L.latLng(49.56, 17.13);
+      var corner2 = L.latLng(49.66, 17.3);
+      var bounds = L.latLngBounds(corner1, corner2);
+
       var map = L.map("map", {
+        center: [49.6075692, 17.2155489],
+        zoom: 18,
         minZoom: 14,
         maxZoom: 22,
-      }).setView([49.6075692, 17.2155489], 18);
+        layers: [CartoDB_Positron],
+        maxBounds: bounds,
+        maxBoundsViscosity: 0.5,
+      });
+
+      const svgExpand =
+        '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/></svg>';
+      const svgCompress =
+        '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M5 16h3v3h2v-5H5v2zm3-8H5v2h5V5H8v3zm6 11h2v-3h3v-2h-5v5zm2-14v3h3v2h-5V5h2z"/></svg>';
+      L.Control.CustomFullscreen = L.Control.extend({
+        onAdd: function (map) {
+          const container = L.DomUtil.create(
+            "div",
+            "leaflet-bar leaflet-control"
+          );
+          const button = L.DomUtil.create(
+            "a",
+            "custom-fullscreen-link",
+            container
+          );
+
+          button.href = "#";
+          button.title = "Celá obrazovka";
+          button.innerHTML = svgExpand;
+
+          button.onclick = function (e) {
+            e.preventDefault();
+            toggleFullscreen(button);
+          };
+
+          return container;
+        },
+      });
+
+      map.addControl(new L.Control.CustomFullscreen({ position: "topleft" }));
+
+      function toggleFullscreen(btn) {
+        const mapContainer = document.getElementById("map-container");
+
+        if (!document.fullscreenElement) {
+          mapContainer.requestFullscreen().catch((err) => {
+            alert(`Chyba při přechodu na celou obrazovku: ${err.message}`);
+          });
+          btn.innerHTML = svgCompress;
+          btn.title = "Ukončit celou obrazovku";
+        } else {
+          document.exitFullscreen();
+          btn.innerHTML = svgExpand;
+          btn.title = "Celá obrazovka";
+        }
+      }
+
+      document.addEventListener("fullscreenchange", () => {
+        const btn = document.querySelector(".custom-fullscreen-link");
+        if (btn) {
+          if (document.fullscreenElement) {
+            btn.innerHTML = svgCompress;
+          } else {
+            btn.innerHTML = svgExpand;
+          }
+        }
+      });
+
+      map.createPane("dronPane");
+      map.getPane("dronPane").style.zIndex = 200;
+
       L.tileLayer("tiles/{z}/{x}/{y}.png", {
         minZoom: 14,
         maxZoom: 22,
         attribution: "© GitHubPages",
         opacity: 0.8,
+        pane: "dronPane",
       }).addTo(map);
 
-      var CartoDB_Positron = L.layerGroup([
-        L.tileLayer(
-          "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png",
-          {
-            attribution:
-              '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
-            zIndex: -1,
-          }
-        ),
-      ]);
+      var baseMaps = {
+        "Základní mapa": CartoDB_Positron,
+        "Letecká mapa": Esri_WorldImagery,
+      };
 
-      CartoDB_Positron.addTo(map);
+      L.control.layers(baseMaps).addTo(map);
+
+      L.control.scale({ imperial: false }).addTo(map);
 
       const geojsonData = {
         type: "FeatureCollection",
@@ -256,7 +332,6 @@
           buttonContainer.appendChild(btn);
         }
       });
-      L.control.scale().addTo(map);
     </script>
   </body>
 </html>
