@@ -4,6 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Garden Restaurant Prachárna – Mapa</title>
+    <link rel="icon" type="image/x-icon" href="./icons/favicon.ico" />
 
     <link
       rel="stylesheet"
@@ -53,7 +54,7 @@
         >
         <ul class="menu">
           <li><a href="index.html" class="active">Domů</a></li>
-          <li><a href="galerie.html">Galerie</a></li>
+          <li><a href="#galerie">Galerie</a></li>
           <li>
             <a
               href="JidelniListek.pdf"
@@ -79,6 +80,74 @@
 
         <div id="map-container">
           <div id="map"></div>
+        </div>
+      </div>
+    </div>
+
+    <div id="galerie" class="content-area">
+      <div class="video-hero">
+        <video autoplay muted loop>
+          <source src="Videa/prulet1-min.mp4" type="video/mp4" />
+          Váš prohlížeč nepodporuje HTML5 video.
+        </video>
+        <div class="video-overlay"></div>
+        <h1>Fotogalerie</h1>
+
+        <a
+          href="#galerie-obsah-wrapper"
+          class="scroll-down-arrow"
+          aria-label="Přejít na galerii"
+        >
+          <i class="fas fa-chevron-down"></i>
+        </a>
+      </div>
+
+      <div class="full-width-title" id="galerie-obsah-wrapper">
+        <h2>Prohlédněte si okolí naší restaurace</h2>
+        <div class="separator"></div>
+      </div>
+
+      <div class="horizontal-scroll-wrapper">
+        <div class="photo-grid">
+          <div
+            class="galerie-item"
+            onclick="openModal('FotkyNavic/DJI_0158-min.JPG', 'Exteriér restaurace')"
+          >
+            <div class="placeholder">
+              <img
+                src="FotkyNavic/DJI_0158-min.JPG"
+                alt="Exteriér restaurace"
+              />
+            </div>
+            <p>Exteriér restaurace</p>
+          </div>
+          <div
+            class="galerie-item"
+            onclick="openModal('FotkyNavic/DJI_0358-min.JPG', 'Hotel')"
+          >
+            <div class="placeholder">
+              <img src="FotkyNavic/DJI_0358-min.JPG" alt="Hotel" />
+            </div>
+            <p>Hotel</p>
+          </div>
+          <div
+            class="galerie-item"
+            onclick="openModal('FotkyNavic/DJI_0153-min.JPG', 'Rybníček')"
+          >
+            <div class="placeholder">
+              <img src="FotkyNavic/DJI_0153-min.JPG" alt="Rybníček" />
+            </div>
+            <p>Rybníček</p>
+          </div>
+          <div
+            class="galerie-item"
+            onclick="openModal('FotkyNavic/DJI_0003-min.JPG', 'Areál')"
+          >
+            <div class="placeholder">
+              <img src="FotkyNavic/DJI_0003-min.JPG" alt="Areál" />
+            </div>
+            <p>Areál</p>
+          </div>
         </div>
       </div>
     </div>
@@ -111,7 +180,7 @@
         </div>
         <div class="copyright">
           &copy; 2025 Hotel Prachárna s.r.o. | Powered by
-          <a href="https://pages.github.com/">GitHub</a>
+          <a href="https://pages.github.com/" target="_blank">GitHub</a>
         </div>
       </div>
     </footer>
@@ -332,6 +401,51 @@
           buttonContainer.appendChild(btn);
         }
       });
+    </script>
+
+    <div id="imageModal" class="modal">
+      <span class="close" onclick="closeModal()">&times;</span>
+      <img class="modal-content" id="img01" src="#" alt="Detail fotografie" />
+    </div>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const arrow = document.querySelector(".scroll-down-arrow");
+        if (arrow) {
+          arrow.addEventListener("click", function (e) {
+            e.preventDefault();
+            const targetElement = document.querySelector(
+              this.getAttribute("href")
+            );
+
+            if (targetElement) {
+              targetElement.scrollIntoView({
+                behavior: "smooth",
+                block: "start",
+              });
+            }
+          });
+        }
+      });
+
+      const modal = document.getElementById("imageModal");
+      const modalImg = document.getElementById("img01");
+
+      function openModal(imageSrc, altText) {
+        modal.style.display = "block";
+        modalImg.src = imageSrc;
+        modalImg.alt = altText;
+      }
+
+      function closeModal() {
+        modal.style.display = "none";
+      }
+
+      modal.onclick = function (event) {
+        if (event.target === modal) {
+          closeModal();
+        }
+      };
     </script>
   </body>
 </html>
